@@ -26,7 +26,9 @@ const create = async (req, res) => {
     res.status(500).send(error);
   }
 };
-//task 1a
+
+// task 1a
+
 const update = async (req, res) => {
   try {
     const menu = await MenuItems.update(req.params.id, req.body);
@@ -57,5 +59,11 @@ const getByNameOrDescription = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-module.exports = { getAll, getOne, create, update, remove, getByNameOrDescription };
+module.exports = {
+  getAll,
+  getOne,
+  create,
+  update,
+  remove,
+  getByNameOrDescription
+};
