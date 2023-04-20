@@ -81,16 +81,14 @@ const remove = async (id) => {
   return order.id;
 };
 
-//task 2b
+// task 2b
 const getByStatus = async (s) => {
   const orders = await Order.find({ status: s }).populate("items.item");
-  if (!orders || orders.length === 0) {
-    console.log(`No orders found with status '${s}'`);
-  }
+ 
   return orders;
 };
 
-//task 2a
+// task 2a
 const getTotalSales = async () => {
   const orders = await Order.find({ status: { $ne: "cancelled" } }).populate(
     "items.item"

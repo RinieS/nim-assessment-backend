@@ -58,16 +58,16 @@ const getByCustomer = async (req, res) => {
   }
 };
 
-//task 2b
+// task 2b
 const getByStatus = async (req, res) => {
-  const { s } = req.query;
-  console.log(s);
+ 
+  
   try {
     const orders = await Order.getByStatus(req.query.s);
     res.send(orders);
   } catch (error) {
     res.status(500).send(error);
-    console.error(error);
+    
   }
 };
 
