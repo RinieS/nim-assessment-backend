@@ -1,4 +1,5 @@
 const mongoose = require("../db.js");
+const { MenuItems } = require("./menuItems.js");
 
 const orderSchema = new mongoose.Schema({
   name: {
@@ -44,8 +45,11 @@ const orderSchema = new mongoose.Schema({
 orderSchema.set("toJSON", {
   virtuals: true
 });
-orderSchema.statics.calcTotal = (items) =>
-  items.reduce((total, item) => total + item.price * item.quantity, 0);
+orderSchema.statics.calcTotal = async (items) =>
+  items.reduce(async (total, item) => {
+    const menuItem = await MenuItems.findById(item.item);
+    return (await total) + menuItem.price * item.quantity;
+  }, Promise.resolve(0));
 
 // order model
 const Order = mongoose.model("Order", orderSchema);
