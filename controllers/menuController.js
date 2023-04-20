@@ -47,4 +47,15 @@ const remove = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getOne, create, update, remove };
+// task 1c
+
+const getByNameOrDescription = async (req, res) => {
+  try {
+    const menu = await MenuItems.getByNameOrDescription(req.query.q);
+    res.send(menu);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+module.exports = { getAll, getOne, create, update, remove, getByNameOrDescription };

@@ -8,7 +8,8 @@ menuRouter.get("/", menuController.getAll);
 menuRouter.put("/:id", menuController.update);
 // task 1b
 menuRouter.delete("/:id", menuController.remove);
-
+// task 1c
+menuRouter.get("/search", menuController.getByNameOrDescription);
 menuRouter.get("/:id", menuController.getOne);
 menuRouter.post("/", menuController.create);
 
