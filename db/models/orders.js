@@ -82,6 +82,20 @@ const getByStatus = async (status) => {
   return orders;
 };
 
+//task 2a
+const getTotalSales = async () => {
+  const orders = await Order.find({ status: { $ne: "cancelled" } }).populate(
+    "items.item"
+  );
+
+  const totalSales = await orders.reduce(
+    async (total, order) =>
+      (await total) + (await Order.calcTotal(order.items)),
+    Promise.resolve(0)
+  );
+  return totalSales.toFixed(2);
+};
+
 module.exports = {
   getAll,
   getOne,
@@ -89,5 +103,6 @@ module.exports = {
   update,
   remove,
   getByStatus,
+  getTotalSales,
   Order
 };
