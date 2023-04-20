@@ -1,4 +1,5 @@
 const mongoose = require("../db.js");
+const { MenuItems } = require("./menuItems.js");
 
 const orderSchema = new mongoose.Schema({
   name: {
@@ -44,8 +45,11 @@ const orderSchema = new mongoose.Schema({
 orderSchema.set("toJSON", {
   virtuals: true
 });
-orderSchema.statics.calcTotal = (items) =>
-  items.reduce((total, item) => total + item.price * item.quantity, 0);
+orderSchema.statics.calcTotal = async (items) =>
+  items.reduce(async (total, item) => {
+    const menuItem = await MenuItems.findById(item.item);
+    return (await total) + menuItem.price * item.quantity;
+  }, Promise.resolve(0));
 
 // order model
 const Order = mongoose.model("Order", orderSchema);
@@ -77,9 +81,25 @@ const remove = async (id) => {
   return order.id;
 };
 
-const getByStatus = async (status) => {
-  const orders = await Order.find({ status }).populate("items");
+// task 2b
+const getByStatus = async (s) => {
+  const orders = await Order.find({ status: s }).populate("items.item");
+ 
   return orders;
+};
+
+// task 2a
+const getTotalSales = async () => {
+  const orders = await Order.find({ status: { $ne: "cancelled" } }).populate(
+    "items.item"
+  );
+
+  const totalSales = await orders.reduce(
+    async (total, order) =>
+      (await total) + (await Order.calcTotal(order.items)),
+    Promise.resolve(0)
+  );
+  return totalSales.toFixed(2);
 };
 
 module.exports = {
@@ -89,5 +109,6 @@ module.exports = {
   update,
   remove,
   getByStatus,
+  getTotalSales,
   Order
 };
