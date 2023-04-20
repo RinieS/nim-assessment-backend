@@ -51,4 +51,19 @@ const create = async (body) => {
   }
 };
 
-module.exports = { getAll, getOne, create, MenuItems };
+// task 1a
+const update = async (id, body) => {
+  try {
+    const menuItem = await MenuItems.findByIdAndUpdate(
+      id,
+      { ...body, updatedAt: Date.now() },
+
+      { new: true }
+    );
+    return menuItem;
+  } catch (error) {
+    return error;
+  }
+};
+
+module.exports = { getAll, getOne, create, update, MenuItems };
