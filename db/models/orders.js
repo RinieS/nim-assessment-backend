@@ -81,8 +81,12 @@ const remove = async (id) => {
   return order.id;
 };
 
-const getByStatus = async (status) => {
-  const orders = await Order.find({ status }).populate("items");
+//task 2b
+const getByStatus = async (s) => {
+  const orders = await Order.find({ status: s }).populate("items.item");
+  if (!orders || orders.length === 0) {
+    console.log(`No orders found with status '${s}'`);
+  }
   return orders;
 };
 
